@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            .line {
+                fill: none;
+                stroke: #333333;
+                stroke-width: 3;
+            }  
+            .overlay {
+            fill: none;
+            pointer-events: all;
+            }
+            .dot {
+                fill: #ff4499;
+                stroke: #fff;
+            }  
+            circle.focus {
+            fill: steelblue;
+            stroke: steelblue;
+            }
+        </style>
+    </head>
+<body>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+<!-- fixed and modified from this original: https://bl.ocks.org/gordlea/27370d1eea8464b04538e6d8ced39e89-->
+
+<div class="first-chart"></div>
+
+<script>
+
+var dataset = [
+                {"score":3},
+                {"score":5},
+                {"score":8},
+                {"score":6},
+                {"score":8},
+                {"score":6},
+                {"score":8},
+                {"score":12}
+            ];
+
+function getMaxY() {
+    return dataset.reduce((max, p) => p.score > max ? p.score : max, dataset[0].score);
+}
+
+var margin = {top: 50, right: 50, bottom: 50, left: 50},
+    height = 400,
+    width = 800,
+    datapoints = 20;
+
+// scale works like a mapping of values in a ratio table:
+var xScale = d3.scaleLinear()
+    .domain([0, dataset.length-1]) // input
+    .range([0, width]); // output
+
+// scale works like a mapping of values in a ratio table:
+var yScale = d3.scaleLinear()
+    .domain([0, getMaxY()]) // input 
+    .range([height, 0]); // output 
+
+// create base element for the chart
+var svg = d3.select(".first-chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// x axis
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(xScale)); 
+
+// y axis
+svg.append("g")
+    .attr("class", "y axis")
+    .call(d3.axisLeft(yScale)); 
+
+// create the line... 
+var line = d3.line()
+    .x(function(d, i) { return xScale(i); }) // set the x values for the line generator
+    .y(function(d) { return yScale(d.score); }) // set the y values for the line generator 
+    .curve(d3.curveLinear) 
+
+// use line to create path
+svg.append("path")
+    .datum(dataset) 
+    .attr("class", "line") 
+    .attr("d", line); 
+
+// adding the markers
+svg.selectAll(".dot")
+    .data(dataset)
+    .enter().append("circle") // Uses the enter().append() method
+    .attr("class", "dot") // Assign a class for styling
+    .attr("cx", function(d, i) { return xScale(i) })
+    .attr("cy", function(d) { return yScale(d.score) })
+    .attr("r", 5)
+    .on("mouseover", function(a, b, c) { 
+        this.classList.add('focus')
+    })
+    .on("mouseout", function() { 
+        this.classList.remove('focus')
+    })
+
+// background box
+svg.selectAll("rect")
+    .data(dataset)
+    .enter()
+    .append("rect")
+    .attr("x", function(d, i) {return xScale(i)+5})
+    .attr("y", function(d) {return yScale(d.score)-11})
+    .attr("width", 32)
+    .attr("height", 20)
+    .attr("rx", 7)
+    .attr("fill", "#efefef");
+
+// point label text
+svg.selectAll(".text")
+    .data(dataset)
+    .enter()
+    .append("text") // Uses the enter().append() method
+    .attr("class", "label") // Assign a class for styling
+    .attr("x", function(d, i) { return xScale(i)+9 })
+    .attr("y", function(d) { return yScale(d.score)+8 })
+    .attr("dy", "-5")
+    .attr("fill","black")
+    .text(function(d) {return d.score; });
+
+</script>
+
+</body>
+</html>
