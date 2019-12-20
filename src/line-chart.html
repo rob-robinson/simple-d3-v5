@@ -2,32 +2,30 @@
 <html>
     <head>
         <meta charset="utf-8">
-
         <style>
-        .line {
+            .line {
+                fill: none;
+                stroke: #333333;
+                stroke-width: 3;
+            }  
+            .overlay {
             fill: none;
-            stroke: #333333;
-            stroke-width: 3;
-        }  
-        .overlay {
-        fill: none;
-        pointer-events: all;
-        }
-        .dot {
-            fill: #ff4499;
-            stroke: #fff;
-        }  
-        circle.focus {
-        fill: steelblue;
-        stroke: steelblue;
-        }
-
+            pointer-events: all;
+            }
+            .dot {
+                fill: #ff4499;
+                stroke: #fff;
+            }  
+            circle.focus {
+            fill: steelblue;
+            stroke: steelblue;
+            }
         </style>
     </head>
 <body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
-<!-- modified from this original: https://bl.ocks.org/gordlea/27370d1eea8464b04538e6d8ced39e89-->
+<!-- fixed and modified from this original: https://bl.ocks.org/gordlea/27370d1eea8464b04538e6d8ced39e89-->
 
 <div class="first-chart"></div>
 
@@ -77,7 +75,7 @@ svg.append("path")
 
 svg.selectAll(".dot")
     .data(dataset)
-  .enter().append("circle") // Uses the enter().append() method
+    .enter().append("circle") // Uses the enter().append() method
     .attr("class", "dot") // Assign a class for styling
     .attr("cx", function(d, i) { return xScale(i) })
     .attr("cy", function(d) { return yScale(d.y) })
