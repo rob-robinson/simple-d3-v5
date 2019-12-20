@@ -12,4 +12,4 @@ open http://localhost:8080/
 
 ```
 
-Also available to view at:<br /> [https://rob-robinson.github.io/simple-d3-v5/src/line-chart.html](https://rob-robinson.github.io/simple-d3-v5/src/line-chart.html)
+Also available to view at:<br /> [https://rob-robinson.github.io/simple-d3-v5/src/](https://rob-robinson.github.io/simple-d3-v5/src/)
